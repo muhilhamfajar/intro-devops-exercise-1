@@ -18,5 +18,6 @@ def get_title_from_web(url):
 web_url = "http://127.0.0.1:5000"
 title = get_title_from_web(web_url)
 
-assert title == "Perpustakaan."
-print("Testing success")
+print("Title:", title)
+assert title == "Perpustakaan"
+print("Testing success!")
