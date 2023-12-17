@@ -25,4 +25,4 @@ jobs:
 
       - name: Testing
         run: 
-          python3 testing/test.py          
+          python3 app/testing/test.py          
