@@ -23,7 +23,11 @@ jobs:
         run: |
           sudo docker compose up -d
 
+      - name: Install requirement
+        run: |
+          pip install -r app/requirements.txt
+
       - name: Testing
         run: |
           sleep 20
-          python3 app/testing/test.py          
+          pytest app/testing/test.py          
