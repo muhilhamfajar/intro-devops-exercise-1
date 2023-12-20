@@ -23,7 +23,7 @@ jobs:
               docker network create library
               docker run -d -p 5432:5432 --network library --hostname database --mount "type=volume,source=pgdata,destination=/var/lib/postgresql/data" --name postgres-container -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=qwerty123 -e POSTGRES_DB=absensi ${{ secrets.DOCKERHUB_USERNAME }}/postgres:${{ inputs.postgres-version-tag }}
               sleep 5
-              docker run -d -p 5000:5000 --network absensi --name flask-container ${{ secrets.DOCKERHUB_USERNAME }}/flaskapp:${{ inputs.flask-version-tag }}
+              docker run -d -p 5000:5000 --network library --name flask-container ${{ secrets.DOCKERHUB_USERNAME }}/flaskapp:${{ inputs.flask-version-tag }}
       
           - name: Remove unused data
             run: |
