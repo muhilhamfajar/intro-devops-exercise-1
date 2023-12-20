@@ -1,6 +1,20 @@
 name: Deployment
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      flask-version:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Flask Version number'
+        # Input has to be provided for the workflow to run
+        required: true
+
+    postgres-version:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Postgres Version number'
+        # Input has to be provided for the workflow to run
+        required: true
 
 jobs:           
     deploy: 
@@ -10,8 +24,8 @@ jobs:
         steps:
           - name : Pull newest images
             run: |
-                docker pull ${{ secrets.DOCKERHUB_USERNAME }}/flaskapp:${{ inputs.flask-version-tag }}
-                docker pull ${{ secrets.DOCKERHUB_USERNAME }}/postgres:${{ inputs.postgres-version-tag }}
+                docker pull ${{ secrets.DOCKERHUB_USERNAME }}/flaskapp:${{ github.event.inputs.flask-version }}
+                docker pull ${{ secrets.DOCKERHUB_USERNAME }}/postgres:${{ github.event.inputs.postgres-version }}
       
           - name: Stop and Remove Existing Containers and Networks
             run: |
@@ -21,9 +35,9 @@ jobs:
           - name: Create Network and Run containers
             run : |
               docker network create library
-              docker run -d -p 5432:5432 --network library --hostname database --mount "type=volume,source=pgdata,destination=/var/lib/postgresql/data" --name postgres-container -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=qwerty123 -e POSTGRES_DB=absensi ${{ secrets.DOCKERHUB_USERNAME }}/postgres:${{ inputs.postgres-version-tag }}
+              docker run -d -p 5432:5432 --network library --hostname database --mount "type=volume,source=pgdata,destination=/var/lib/postgresql/data" --name postgres-container -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=qwerty123 -e POSTGRES_DB=absensi ${{ secrets.DOCKERHUB_USERNAME }}/postgres:${{ github.event.inputs.postgres-version }}
               sleep 5
-              docker run -d -p 5000:5000 --network library --name flask-container ${{ secrets.DOCKERHUB_USERNAME }}/flaskapp:${{ inputs.flask-version-tag }}
+              docker run -d -p 5000:5000 --network library --name flask-container ${{ secrets.DOCKERHUB_USERNAME }}/flaskapp:${{ github.event.inputs.flask-version }}
       
           - name: Remove unused data
             run: |
