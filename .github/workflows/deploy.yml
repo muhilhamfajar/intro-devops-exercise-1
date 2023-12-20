@@ -9,8 +9,8 @@ on:
         description: 'Flask Version number'
         # Input has to be provided for the workflow to run
         required: true
-
-    postgres-version:
+        
+      postgres-version:
         # Friendly description to be shown in the UI instead of 'name'
         description: 'Postgres Version number'
         # Input has to be provided for the workflow to run
